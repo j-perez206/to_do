@@ -1,0 +1,95 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Editar Tarea{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+
+    .back-link { display: inline-block; margin-bottom: 20px; padding: 10px 15px; background: #6c757d; color: white; text-decoration: none; border-radius: 3px; }
+    .back-link:hover { background: #5a6268; }
+
+    {# Estilos del formulario #}
+    .form-container {
+        background: #f9f9f9;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+
+    .form-group { margin-bottom: 15px; }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .form-group.checkbox-group {
+        display: flex;
+        align-items: center;
+    }
+
+    .form-group.checkbox-group label {
+        display: inline;
+        margin-bottom: 0;
+        font-weight: normal;
+        margin-left: 0;
+        margin-right: 8px;
+    }
+
+    .form-group textarea, .form-group input[type="checkbox"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        font-size: 14px;
+        box-sizing: border-box;
+    }
+
+    .form-group input[type="checkbox"] {
+        width: auto;
+        margin-right: 8px;
+        cursor: pointer;
+    }
+
+    .form-group button {
+        background: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 16px;
+        width: 100%;
+    }
+
+    .form-group button:hover {
+        background: #0056b3;
+    }
+</style>
+
+<div class="example-wrapper">
+    <a href="{{ path('app_post') }}" class="back-link">← Volver</a>
+
+    <h1>Editar Tarea</h1>
+
+    <div class="form-container">
+        {{ form_start(form) }}
+            <div class="form-group">
+                {{ form_label(form.text) }}
+                {{ form_widget(form.text) }}
+            </div>
+            <div class="form-group checkbox-group">
+                {{ form_label(form.done) }}
+                {{ form_widget(form.done) }}
+            </div>
+            <div class="form-group">
+                {{ form_widget(form.submit) }}
+            </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}
