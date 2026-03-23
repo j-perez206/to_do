@@ -67,7 +67,7 @@
         background: #0056b3;
     }
 
-    {# Estilos de tareas  #}
+    {# Estilos de tareas #}
     .post-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border: 1px solid #000; margin: 5px 0; border-radius: 5px; }
     .post-text { flex: 1; }
     .post-text.completed { text-decoration: line-through; color: #999; }
@@ -83,10 +83,10 @@
 
     <h2>Crear tarea</h2>
     <div class="form-container">
-        {{ form_start(form) }}
+        {{ form_start(form, {'action': path('app_tareas_create'), 'method': 'POST'}) }}
             <div class="form-group">
                 {{ form_label(form.text) }}
-                {{ form_widget(form.text, {attr:{'placeholder':'Peinar al calvo'}})}}
+                {{ form_widget(form.text, {attr:{'placeholder':'Tarea de ejemplo'}})}}
             </div>
             <div class="form-group checkbox-group">
                 {{ form_label(form.done) }}
@@ -108,11 +108,11 @@
                     <strong>{{ post.text }}</strong>
                 </div>
                 <div class="post-actions">
-                    <a href="{{ path('app_post_edit', { id: post.id }) }}" class="edit-btn">Editar</a>
-                    <a href="{{ path('app_post_toggle', { id: post.id }) }}" class="toggle-btn">
+                    <a href="{{ path('app_tareas_edit', { id: post.id }) }}" class="edit-btn">Editar</a>
+                    <a href="{{ path('app_tareas_toggle', { id: post.id }) }}" class="toggle-btn">
                         {% if post.done %}Desmarcar{% else %}Completar{% endif %}
                     </a>
-                    <form method="POST" action="{{ path('app_post_delete', { id: post.id }) }}" style="display: inline;" onsubmit="return confirm('¿Estás seguro?');">
+                    <form method="POST" action="{{ path('app_tareas_delete', { id: post.id }) }}" style="display: inline;" onsubmit="return confirm('¿Estás seguro?');">
                         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ post.id) }}">
                         <button type="submit" class="delete-btn">Eliminar</button>
                     </form>
