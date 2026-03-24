@@ -1,0 +1,32 @@
+{% extends 'template-topsidebar.html.twig' %}
+
+{% block title %}To Do App{% endblock %}
+
+
+{% block body %}
+
+    <body class="bg-surface text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed-variant">
+
+    {{ parent() }}
+        <!-- Main Content -->
+        <main class="flex-1 ml-64">
+            <!-- Featured Article -->
+            <section class="py-24 px-8 bg-surface-container-lowest" id="featured">
+                <div class="max-w-screen-2xl mx-auto">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                        <div class="flex flex-col justify-center">
+                            <h2 class="font-headline text-4xl md:text-5xl font-bold tracking-tighter text-on-surface mb-6 leading-tight">
+                                Esto es una página de inicio
+                            </h2>
+                            <p class="font-body text-lg text-on-surface-variant mb-8 leading-relaxed max-w-xl">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </body>
+
+
+{% endblock %}

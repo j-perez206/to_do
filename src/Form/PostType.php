@@ -24,9 +24,7 @@ class PostType extends AbstractType
                 'required' => false,
                 'label' => '¿Está hecho?'
             ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'Guardar'
-    ])
+
         ;
     }
 

@@ -26,7 +26,11 @@ final class PostController extends AbstractController
         $posts = $this->em->getRepository(Post::class)->findAllPosts();
         $form = $this->createForm(PostType::class, $post);
 
-        return $this->render('post/index.html.twig', [
+        // Si el usuario no está logado redirige a la página de login
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+        return $this->render('home/index.html.twig', [
             'form' => $form->createView(),
             'posts' => $posts
         ]);

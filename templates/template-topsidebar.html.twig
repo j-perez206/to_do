@@ -1,0 +1,122 @@
+{% extends 'base.html.twig' %}
+
+{% block body%}
+
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@700;800;900&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .editorial-gradient {
+            background: linear-gradient(135deg, #00246a 0%, #00389a 100%);
+        }
+        .ghost-border {
+            border-bottom: 2px solid rgba(197, 198, 205, 0.2);
+        }
+        .ghost-border:focus-within {
+            border-bottom-color: #00246a;
+        }
+    </style>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "tertiary-fixed-dim": "#dfc299",
+                        "surface-container-highest": "#e0e3e5",
+                        "surface-tint": "#0053db",
+                        "inverse-primary": "#b4c5ff",
+                        "on-surface-variant": "#44474c",
+                        "error-container": "#ffdad6",
+                        "primary": "#00246a",
+                        "outline-variant": "#c5c6cd",
+                        "tertiary-fixed": "#fcdeb3",
+                        "on-tertiary-fixed": "#281901",
+                        "tertiary-container": "#503d1e",
+                        "surface-bright": "#f7f9fb",
+                        "primary-container": "#00389a",
+                        "on-secondary-fixed": "#171c24",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed": "#00174b",
+                        "surface-container-low": "#f2f4f6",
+                        "on-error": "#ffffff",
+                        "surface-variant": "#e0e3e5",
+                        "on-surface": "#191c1e",
+                        "on-error-container": "#93000a",
+                        "error": "#ba1a1a",
+                        "secondary-fixed": "#dee2ee",
+                        "surface": "#f7f9fb",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "on-primary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-fixed-variant": "#424750",
+                        "surface-dim": "#d8dadc",
+                        "on-background": "#191c1e",
+                        "on-secondary-container": "#5f656e",
+                        "on-primary-container": "#8da9ff",
+                        "on-tertiary-container": "#c3a881",
+                        "background": "#f7f9fb",
+                        "inverse-on-surface": "#eff1f3",
+                        "secondary-fixed-dim": "#c2c6d1",
+                        "outline": "#75777d",
+                        "secondary-container": "#dee2ee",
+                        "on-tertiary-fixed-variant": "#574424",
+                        "secondary": "#595f68",
+                        "inverse-surface": "#2d3133",
+                        "surface-container-high": "#e6e8ea",
+                        "primary-fixed": "#dbe1ff",
+                        "tertiary": "#38270a",
+                        "surface-container": "#eceef0",
+                        "on-primary-fixed-variant": "#003ea8"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+</head>
+<!-- TopAppBar -->
+<header class="bg-slate-50 dark:bg-slate-950 docked full-width top-0 sticky z-50">
+    <div class="flex justify-between items-center w-full px-8 py-6 max-w-screen-2xl mx-auto">
+        <div class="flex items-center gap-12">
+            <a class="text-2xl font-black tracking-tighter text-slate-900 dark:text-slate-100 font-headline" href="/">To Do App</a>
+        </div>
+    </div>
+</header>
+<div class="flex min-h-screen">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-surface-container border-r border-surface-variant fixed h-screen overflow-y-auto pt-8">
+        <nav class="px-4 space-y-2">
+            <a href="/" class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface hover:bg-surface-container-high transition-colors">
+                <span class="material-symbols-outlined text-primary">dashboard</span>
+                <span class="font-label font-semibold">Inicio</span>
+            </a>
+            <a href="/tareas" class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface hover:bg-surface-container-high transition-colors">
+                <span class="material-symbols-outlined text-primary">task_alt</span>
+                <span class="font-label font-semibold">Mis Tareas</span>
+            </a>
+
+            <div class="my-6 border-t border-surface-variant"></div>
+
+            <a href="/logout" class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface hover:bg-surface-container-high transition-colors">
+                <span class="material-symbols-outlined text-primary">logout</span>
+                <span class="font-label font-semibold">Cerrar sesión</span>
+            </a>
+        </nav>
+    </aside>
+</div>
+
+{% endblock %}

@@ -1,0 +1,140 @@
+{% extends 'template-topsidebar.html.twig' %}
+
+{% block title %}Editar Tarea{% endblock %}
+
+{% block body %}
+<style>
+
+    .back-link { display: inline-block; margin-bottom: 20px; padding: 10px 15px; background: #6c757d; color: white; text-decoration: none; border-radius: 3px; }
+    .back-link:hover { background: #5a6268; }
+
+    {# Estilos del formulario #}
+    .form-container {
+        background: #f9f9f9;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+
+    .form-group { margin-bottom: 15px; }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .form-group.checkbox-group {
+        display: flex;
+        align-items: center;
+    }
+
+    .form-group.checkbox-group label {
+        display: inline;
+        margin-bottom: 0;
+        font-weight: normal;
+        margin-left: 0;
+        margin-right: 8px;
+    }
+
+    .form-group textarea, .form-group input[type="checkbox"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        font-size: 14px;
+        box-sizing: border-box;
+    }
+
+    .form-group input[type="checkbox"] {
+        width: auto;
+        margin-right: 8px;
+        cursor: pointer;
+    }
+
+    .form-group button {
+        background: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 16px;
+        width: 100%;
+    }
+
+    .form-group button:hover {
+        background: #0056b3;
+    }
+    .checkbox input[type="checkbox"] {
+        width: 1%;
+        padding: 10px;
+        border: 1px solid #000;
+        border-radius: 3px;
+        font-size: 14px;
+        box-sizing: border-box;
+    }
+</style>
+
+    {{ parent() }}
+
+
+    <main class="flex-1 ml-64">
+
+        <section class="py-12 px-8 bg-surface min-h-screen">
+            <div class="max-w-6xl mx-auto">
+                <a href="{{ path('app_tareas') }}" class="inline-flex items-center gap-2 text-primary hover:text-primary-container mb-8">
+                    <span class="material-symbols-outlined">arrow_back</span>
+                    Volver
+                </a>
+
+                <div class="bg-surface-container-lowest rounded-lg border border-surface-variant p-8 max-w-2xl">
+                    <h1 class="font-headline text-3xl font-bold text-on-surface mb-8">Editar Tarea</h1>
+
+                    {{ form_start(form, {'attr': {'class': 'space-y-6', 'novalidate': 'novalidate'}}) }}
+                    <div class="space-y-2">
+                        <label class="font-label text-sm font-semibold text-on-surface-variant uppercase tracking-wide">Descripción</label>
+                        {{ form_widget(form.text, {'attr': {'class': 'w-full bg-surface-container-low border-b-2 border-transparent border-b-outline-variant/20 focus:border-b-primary focus:ring-0 transition-all duration-300 px-0 py-3 font-body text-on-surface placeholder:text-outline-variant outline-none'}}) }}
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            {{ form_widget(form.done, {'attr': {'class': 'w-5 h-5 rounded cursor-pointer'}}) }}
+                            <span class="font-label text-sm text-on-surface">Completada</span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="w-full editorial-gradient text-on-primary font-label font-bold uppercase tracking-widest py-3 rounded-md hover:opacity-90 transition-all active:scale-[0.98] shadow-lg shadow-primary/20">
+                        Guardar Cambios
+                    </button>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </section>
+    </main>
+
+
+
+    {# <div class="example-wrapper">
+
+
+    <h1>Editar Tarea</h1>
+
+    <div class="form-container">
+
+            <div class="form-group">
+
+            </div>
+            <div class="form-group checkbox-group">
+
+            </div>
+            <div class="form-group">
+                {{ form_widget(form.submit) }}
+            </div>
+
+    </div>
+</div> #}
+
+{% endblock %}

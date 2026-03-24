@@ -1,6 +1,201 @@
-{% extends 'base.html.twig' %}
-{% extends 'post/index.html.twig' %}
+{% extends 'template-topsidebar.html.twig' %}
 
-{% block title %}{{ parent() }}{% endblock %}
+{% block title %} To Do App{% endblock %}
+
+{% block body %}
+
+    <head>
+        <style>
+            .post-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border: 1px solid #000; margin: 5px 0; border-radius: 5px; }
+            .post-text { flex: 1; }
+            .post-text.completed { text-decoration: line-through; color: #999; }
+            .post-actions { display: flex; gap: 10px; }
+            .post-actions a, .post-actions button { padding: 5px 10px; text-decoration: none; border: none; cursor: pointer; border-radius: 3px; }
+            .toggle-btn { background: linear-gradient(135deg, #0bb51f 0%, #0ff52a 100%); }
+            .delete-btn { background: linear-gradient(135deg, #990910 0%, #f20c17 100%); }
+            .checkbox input[type="checkbox"] {
+                width: 1%;
+                padding: 10px;
+                border: 1px solid #000;
+                border-radius: 3px;
+                font-size: 14px;
+                box-sizing: border-box;
+            }
+            .save-btn button{padding: 5px 10px; text-decoration: none; border: none; cursor: pointer; border-radius: 3px; }
+
+        </style>
+        <script id="tailwind-config">
+            tailwind.config = {
+                darkMode: "class",
+                theme: {
+                    extend: {
+                        colors: {
+                            "tertiary-fixed-dim": "#dfc299",
+                            "surface-container-highest": "#e0e3e5",
+                            "surface-tint": "#0053db",
+                            "inverse-primary": "#b4c5ff",
+                            "on-surface-variant": "#44474c",
+                            "error-container": "#ffdad6",
+                            "primary": "#00246a",
+                            "outline-variant": "#c5c6cd",
+                            "tertiary-fixed": "#fcdeb3",
+                            "on-tertiary-fixed": "#281901",
+                            "tertiary-container": "#503d1e",
+                            "surface-bright": "#f7f9fb",
+                            "primary-container": "#00389a",
+                            "on-secondary-fixed": "#171c24",
+                            "on-tertiary": "#ffffff",
+                            "on-primary-fixed": "#00174b",
+                            "surface-container-low": "#f2f4f6",
+                            "on-error": "#ffffff",
+                            "surface-variant": "#e0e3e5",
+                            "on-surface": "#191c1e",
+                            "on-error-container": "#93000a",
+                            "error": "#ba1a1a",
+                            "secondary-fixed": "#dee2ee",
+                            "surface": "#f7f9fb",
+                            "surface-container-lowest": "#ffffff",
+                            "primary-fixed-dim": "#b4c5ff",
+                            "on-primary": "#ffffff",
+                            "on-secondary": "#ffffff",
+                            "on-secondary-fixed-variant": "#424750",
+                            "surface-dim": "#d8dadc",
+                            "on-background": "#191c1e",
+                            "on-secondary-container": "#5f656e",
+                            "on-primary-container": "#8da9ff",
+                            "on-tertiary-container": "#c3a881",
+                            "background": "#f7f9fb",
+                            "inverse-on-surface": "#eff1f3",
+                            "secondary-fixed-dim": "#c2c6d1",
+                            "outline": "#75777d",
+                            "secondary-container": "#dee2ee",
+                            "on-tertiary-fixed-variant": "#574424",
+                            "secondary": "#595f68",
+                            "inverse-surface": "#2d3133",
+                            "surface-container-high": "#e6e8ea",
+                            "primary-fixed": "#dbe1ff",
+                            "tertiary": "#38270a",
+                            "surface-container": "#eceef0",
+                            "on-primary-fixed-variant": "#003ea8"
+                        },
+                        fontFamily: {
+                            "headline": ["Manrope"],
+                            "body": ["Inter"],
+                            "label": ["Inter"]
+                        },
+                        borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                    },
+                },
+            }
+        </script>
+    </head>
+    <body class="bg-surface text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed-variant">
+    {{ parent() }}
+
+    <main class="flex-1 ml-64">
+
+        <section class="py-24 px-8 bg-surface-container-lowest" id="featured">
+            <div class="max-w-screen-2xl mx-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+                    <div class="flex flex-col justify-center">
+                        <span class="font-label text-xs tracking-[0.2em] text-primary uppercase mb-4 block">Crear tarea</span>
+                        {{ form_start(form, {'action': path('app_tareas_create'), 'method': 'POST'}) }}
+                        {{ form_widget(form.text, {attr:{'placeholder':'Tarea de ejemplo'}})}}
+                        <br>
+                        <div class ="checkbox">
+                            {{ form_label(form.done) }}
+                            {{ form_widget(form.done) }}
+                        </div>
+
+                        <br>
+                        <div class="save-btn">
+                            <button type="submit" class="editorial-gradient text-on-primary font-label font-bold uppercase tracking-widest py-2 rounded-md hover:opacity-90 transition-all active:scale-[0.98] shadow-lg shadow-primary/20">
+                                Guardar
+                            </button>
+
+                        </div>
+
+                        {{ form_end(form) }}
+                    </div>
+                    <div class="flex flex-col justify-center">
+                    <span class="font-label text-xs tracking-[0.2em] text-primary uppercase mb-4 block">Tareas</span>
+                        {% if posts is empty %}
+                            <p>No hay tareas</p>
+                        {% else %}
+                            {% for post in posts %}
+                                <div class="post-item" data-delete-url="{{ path('app_tareas_delete', { id: post.id }) }}" data-csrf-token="{{ csrf_token('delete' ~ post.id) }}" data-task-name="{{ post.text }}" data-task-id="{{ post.id }}">
+                                    <div class="post-text {% if post.done %}completed{% endif %}">
+                                        <strong>{{ post.text }}</strong>
+                                    </div>
+                                    <div class="post-actions">
+                                        <a href="{{ path('app_tareas_edit', { id: post.id }) }}" class="editorial-gradient text-on-primary font-label font-bold uppercase tracking-widest py-2 rounded-md hover:opacity-90 transition-all active:scale-[0.98] shadow-lg shadow-primary/20">Editar</a>
+                                        <a href="{{ path('app_tareas_toggle', { id: post.id }) }}" class="toggle-btn text-on-primary font-label font-bold uppercase tracking-widest py-2 rounded-md hover:opacity-90 transition-all active:scale-[0.98] shadow-lg shadow-primary/20">
+                                            {% if post.done %}Desmarcar{% else %}Completar{% endif %}
+                                        </a>
+                                            <button onclick="openDeleteModal(this)" type="submit" class="delete-btn text-on-primary font-label font-bold uppercase tracking-widest py-2 rounded-md hover:opacity-90 transition-all active:scale-[0.98] shadow-lg shadow-primary/20">Eliminar</button>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 
 
+    <!-- Modal de Confirmación -->
+    <div id="deleteModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <div class="bg-surface-container-lowest rounded-lg shadow-2xl p-8 max-w-sm w-full mx-4">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="material-symbols-outlined text-error text-3xl">delete_outline</span>
+                <h3 class="font-headline text-xl font-bold text-on-surface">¿Eliminar tarea?</h3>
+            </div>
+
+            <p class="text-on-surface-variant mb-6">
+                La tarea será eliminada permanentemente.
+            </p>
+
+            <div class="flex gap-3">
+                <button onclick="closeDeleteModal()" class="flex-1 px-4 py-3 rounded-md border border-surface-variant text-on-surface font-label font-semibold hover:bg-surface-container transition-colors">
+                    Cancelar
+                </button>
+                <form id="deleteForm" method="POST" style="flex: 1;">
+                    <input type="hidden" name="_token" id="csrfToken" value="">
+                    <button type="submit" class="w-full px-4 py-3 bg-error text-on-error rounded-md font-label font-semibold hover:opacity-90 transition-opacity">
+                        Eliminar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentDeleteElement = null;
+
+        function openDeleteModal(button) {
+            currentDeleteElement = button.closest('.post-item');
+
+            const deleteUrl = currentDeleteElement.getAttribute('data-delete-url');
+            const csrfToken = currentDeleteElement.getAttribute('data-csrf-token');
+
+
+            document.getElementById('csrfToken').value = csrfToken;
+            document.getElementById('deleteForm').action = deleteUrl;
+            document.getElementById('deleteModal').classList.remove('hidden');
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.add('hidden');
+            currentDeleteElement = null;
+        }
+
+        // Cerrar modal al presionar Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeDeleteModal();
+            }
+        });
+    </script>
+    </body>
+{% endblock %}

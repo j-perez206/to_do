@@ -19,10 +19,23 @@ final class TareasController extends AbstractController
         $this->em = $em;
     }
 
-    #[Route('/', name: 'app_tareas')]
-    public function index(): Response
+    #[Route('/tareas', name: 'app_tareas')]
+    public function index(Request $request): Response
     {
-        return $this->render('post/index.html.twig', [
+        $post = new Post();
+        $posts = $this->em->getRepository(Post::class)->findAllPosts();
+        $form = $this->createForm(PostType::class, $post);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->em->persist($post);
+            $this->em->flush();
+            return $this->redirectToRoute('app_tareas');
+        }
+
+        return $this->render('tareas/index.html.twig', [
+            'form' => $form->createView(),
+            'posts' => $posts,
             'controller_name' => 'TareasController',
         ]);
     }
@@ -39,7 +52,7 @@ final class TareasController extends AbstractController
             $this->em->flush();
         }
 
-        return $this->redirectToRoute('app_post');
+        return $this->redirectToRoute('app_tareas');
     }
 
     #[Route('/post/edit/{id}', name: 'app_tareas_edit')]
@@ -50,10 +63,10 @@ final class TareasController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->flush();
-            return $this->redirectToRoute('app_post');
+            return $this->redirectToRoute('app_tareas');
         }
 
-        return $this->render('post/edit.html.twig', [
+        return $this->render('tareas/edit.html.twig', [
             'form' => $form->createView(),
             'post' => $post
         ]);
@@ -66,7 +79,7 @@ final class TareasController extends AbstractController
             $this->em->remove($post);
             $this->em->flush();
         }
-        return $this->redirectToRoute('app_post');
+        return $this->redirectToRoute('app_tareas');
     }
 
     #[Route('/post/toggle/{id}', name: 'app_tareas_toggle')]
@@ -74,6 +87,6 @@ final class TareasController extends AbstractController
     {
         $post->setDone(!$post->isDone());
         $this->em->flush();
-        return $this->redirectToRoute('app_post');
+        return $this->redirectToRoute('app_tareas');
     }
 }
