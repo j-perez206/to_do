@@ -9,14 +9,20 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Event\TareaCreada;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 final class TareasController extends AbstractController
 {
     private $em;
+    private $dispatcher;
 
-    public function __construct(EntityManagerInterface $em)
+    // Además del entitymanager, se crea el dispatcher del evento
+    public function __construct(EntityManagerInterface $em,
+    EventDispatcherInterface $eventDispatcher)
     {
         $this->em = $em;
+        $this->dispatcher = $eventDispatcher;
     }
 
     #[Route('/tareas', name: 'app_tareas')]
@@ -26,12 +32,6 @@ final class TareasController extends AbstractController
         $posts = $this->em->getRepository(Post::class)->findAllPosts();
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->em->persist($post);
-            $this->em->flush();
-            return $this->redirectToRoute('app_tareas');
-        }
 
         return $this->render('tareas/index.html.twig', [
             'form' => $form->createView(),
@@ -50,6 +50,8 @@ final class TareasController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->persist($post);
             $this->em->flush();
+            // Cada vez que haga flush, se ejecuta el dispatcher del evento
+            $this->dispatcher->dispatch(new TareaCreada($post));
         }
 
         return $this->redirectToRoute('app_tareas');

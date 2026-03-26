@@ -21,5 +21,9 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
-    App\EventListener\LogoutSubscriber:
-        tags: [ kernel.event_listener ]
+    App\EventSubscriber\LogoutSubscriber:
+        tags: [ kernel.event_subscriber ]
+
+    App\EventSubscriber\EnviarCorreoInformativoSubscriber:
+        tags:
+            - {name: doctrine.event_subscriber }
