@@ -9,7 +9,7 @@ doctrine:
         profiling_collect_backtrace: '%kernel.debug%'
         use_savepoints: true
         driver: 'pdo_mysql'
-        server_version: '10.4.32-MariaDB'  # Versión exacta con el sufijo
+        server_version: '8.2'
     orm:
         auto_generate_proxy_classes: true
         enable_lazy_ghost_objects: true
