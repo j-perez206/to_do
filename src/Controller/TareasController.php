@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Post;
+use App\Entity\User;
 use App\Form\PostType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -11,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Event\TareaCreada;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class TareasController extends AbstractController
 {
@@ -25,11 +27,12 @@ final class TareasController extends AbstractController
         $this->dispatcher = $eventDispatcher;
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/tareas', name: 'app_tareas')]
     public function index(Request $request): Response
     {
         $post = new Post();
-        $posts = $this->em->getRepository(Post::class)->findAllPosts();
+        $posts = $this->em->getRepository(Post::class)->findAllPosts($this->getUser());
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
 
@@ -49,6 +52,8 @@ final class TareasController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->persist($post);
+            // Asigna la tarea al usuario logeado
+            $post->setUser($this->getUser());
             $this->em->flush();
             // Cada vez que haga flush, se ejecuta el dispatcher del evento
             $this->dispatcher->dispatch(new TareaCreada($post));
@@ -60,6 +65,9 @@ final class TareasController extends AbstractController
     #[Route('/post/edit/{id}', name: 'app_tareas_edit')]
     public function editPost(Post $post, Request $request): Response
     {
+        //Deniega el acceso si quien intenta editar no es el dueño de la tarea
+        $this->denyAccessUnlessGranted('POST_EDIT', $post);
+
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
 

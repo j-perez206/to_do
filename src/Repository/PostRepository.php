@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Post;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,9 +17,11 @@ class PostRepository extends ServiceEntityRepository
         parent::__construct($registry, Post::class);
     }
 
-    public function findAllPosts()
+    public function findAllPosts(User $user)
     {
         return $this->createQueryBuilder('post')
+            ->andWhere('post.user = :user')
+            ->setParameter('user', $user)
             ->orderBy('post.id', 'DESC')
             ->getQuery()
             ->getResult();
