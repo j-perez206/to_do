@@ -23,14 +23,14 @@ final class PostController extends AbstractController
     #[Route('/', name: 'app_post')]
     public function index(Request $request): Response
     {
-        $post = new Post();
-        $posts = $this->em->getRepository(Post::class)->findAllPosts($this->getUser());
-        $form = $this->createForm(PostType::class, $post);
-
         // Si el usuario no está logado redirige a la página de login
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
+
+        $post = new Post();
+        $posts = $this->em->getRepository(Post::class)->findAllPosts($this->getUser());
+        $form = $this->createForm(PostType::class, $post);
         return $this->render('home/index.html.twig', [
             'form' => $form->createView(),
             'posts' => $posts

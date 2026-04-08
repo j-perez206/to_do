@@ -65,8 +65,10 @@ final class TareasController extends AbstractController
     #[Route('/post/edit/{id}', name: 'app_tareas_edit')]
     public function editPost(Post $post, Request $request): Response
     {
-        //Deniega el acceso si quien intenta editar no es el dueño de la tarea
-        $this->denyAccessUnlessGranted('POST_EDIT', $post);
+        //Si el usuario no es el dueño de la tarea, lleva a la página de acceso denegado
+        if (!$this->isGranted('POST_EDIT', $post)) {
+            return $this->render('error/acceso_denegado.html.twig', [], new Response('', 403));
+        }
 
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
